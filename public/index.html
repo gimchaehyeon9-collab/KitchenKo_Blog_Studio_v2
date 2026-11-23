@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>키친앤코 블로그 스튜디오</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%235a4332'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='white' font-family='sans-serif'%3Ek%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="hub.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><b id="brandName">kitchen&amp;ko</b><span>STUDIO 2.10.40</span><span class="brand-switch" id="brandSwitch" title="블로그 종류 선택"><button type="button" data-brand="kitchenko" class="on">키친앤코</button><button type="button" data-brand="lemon">레몬하우스</button></span></div>
+  <nav class="hub-tabs" aria-label="화면 선택"><button type="button" data-hub="sites" class="kk-only">현장</button><button type="button" data-hub="lemon" class="lemon-only">레몬 현장</button><button type="button" data-hub="blog" class="on">블로그</button><button type="button" data-hub="cafe" class="lemon-only">카페 공사전·중</button><button type="button" data-hub="insta" class="kk-only">인스타<span class="cnt" id="igQueueTab"></span></button></nav>
+  <div class="top-actions">
+    <span id="extState" class="pill">확장 확인 중…</span>
+    <button type="button" id="openSettings" class="btn ghost">설정</button>
+    <button type="button" id="newPost" class="btn ghost">새 글 시작</button>
+  </div>
+</header>
+<div id="fileWarn" class="banner" hidden>파일을 직접 열었어요. <b>start.vbs</b>로 실행해야 네이버 자동 입력이 작동합니다.</div>
+
+<main class="layout">
+<div class="wz-bar" id="blogSteps"></div>
+<div class="wz-desc" id="blogStepsDesc"><span class="wz-desc-t"></span><button type="button" class="link wz-mode"></button></div>
+<section class="work">
+
+  <!-- 1. 현장 정보 -->
+  <div class="panel" data-step="1">
+    <div class="ph"><h2>현장 정보</h2></div>
+    <div class="grid2">
+      <label class="field">아파트명<input id="apt" placeholder="예: 다대롯데캐슬블루" autocomplete="off"></label>
+      <label class="field">지역 (시공 현장 앞부분) <small id="regionHint"></small><input id="region" placeholder="아파트명을 적으면 자동으로 찾아요" autocomplete="off"><div id="regionPick" class="pick-list" hidden></div></label>
+    </div>
+    <div class="field kk-only">시공 품목<div id="items" class="chips"></div></div>
+    <div class="field kk-only">메인 컬러 톤 <small>사진에서 실제로 보이는 톤</small><div id="tones" class="chips"></div></div>
+    <div class="grid2 kk-only">
+      <label class="field">가구 사양 <small>■ 가구 사양 줄에만 들어가요</small><input id="specs" placeholder="예: 플레인 K, 센서블 K"></label>
+      <label class="field">인사말 가구 설명 <small>비우면 톤에 맞춰 자동</small><input id="intro" placeholder=""></label>
+    </div>
+    <label class="field">이 글에 꼭 넣을 내용 <small>선택 · <span class="kk-only">마지막 문단에 들어가고, </span>AI 작성 때 반영돼요</small><textarea id="must" rows="2" placeholder="예: 기존 붙박이장을 철거하고 화장대까지 새로 제작, 아이 방과 이어지는 수납"></textarea></label>
+    <div class="field lemon-only" id="refBox">시공 참고 글 <small>선택 · 같은 사진으로 작업했던 카페글을 넣으면 Claude가 읽고 공사 범위·공간 구분을 참고해 써요</small>
+      <div class="btns" style="margin:6px 0 0;flex-wrap:nowrap"><input id="refUrl" type="url" autocomplete="off" spellcheck="false" placeholder="카페 글 주소를 붙여넣으면 바로 읽어 와요 — 예: https://cafe.naver.com/…/18403" style="flex:1;min-width:0"><button type="button" id="refLink" class="btn" title="로그인된 이 크롬에서 글을 잠깐 열어 글자를 읽어 와요 (크롬 확장 프로그램 필요)">링크로 읽기</button></div>
+      <label class="check" style="margin:6px 0 0;font-size:12.5px" title="사진이 막 들어온 상태(문단·콜라주 없음)일 때만 알아서 시작해요. 이미 쓰던 글은 건드리지 않아요"><input type="checkbox" id="aiFlowAuto"> 링크를 읽거나 사진을 들고 오면 <b>바로 공간 나누기 → 콜라주 → 글쓰기</b>까지 자동으로</label>
+      <label class="check" style="margin:4px 0 0;font-size:12.5px" title="카페 마감글에서 대표사진 다음 사진(공사범위 표)을 찾아 캡처 이미지로 함께 읽어요. 못 찾거나 받지 못하면 글만 읽고 알려 줘요"><input type="checkbox" id="refAutoImg"> 글 속 <b>공사범위 사진</b>도 같이 읽기 <small class="muted">(대표사진 다음 사진 · 캡처 이미지로 들어가요)</small></label>
+      <textarea id="ref" rows="4" style="margin-top:6px" placeholder="또는 카페글 본문을 복사해서 붙여넣기 (공사 범위, 공간별 설명, 마감재 등). 글이 이미지면 아래 [캡처 이미지]로 넣으세요."></textarea>
+      <div class="btns" style="margin-top:6px"><label class="btn ghost file">글 파일(.txt)<input type="file" id="refFile" accept=".txt,.md,text/plain"></label><label class="btn ghost file">캡처 이미지<input type="file" id="refImg" accept="image/jpeg,image/png,image/webp" multiple></label><button type="button" id="refRead" class="btn ghost">참고 글 읽어보기</button><button type="button" id="refClear" class="btn ghost">비우기</button></div>
+      <div id="refImgs" class="ref-imgs" hidden></div>
+      <div id="refStatus" class="status" hidden style="margin-top:6px"></div>
+    </div>
+  </div>
+
+  <!-- 1-2. 부동산 찾기 (네이버 부동산 면적·도면) — 레몬하우스 전용 (키친앤코 블로그에서는 숨김) -->
+  <details class="panel fold lemon-only" id="sitePanel" data-step="1">
+    <summary><h2>부동산 찾기 <small class="muted">네이버 부동산 · 면적·도면</small></h2><span id="sitePill" class="pill">조회 전</span><span class="fold-hint">펼치기</span></summary>
+    <div class="site-body">
+      <p class="help" style="margin-top:0">아파트명을 적고 <b>[부동산에서 자동으로 찾기]</b>를 누르면 네이버 부동산에서 단지를 찾아 평형·면적·도면 그림을 가져와요. 후보가 여러 개면 맞는 단지를, 평형이 여러 종이면 실제 현장의 평형(타입)을 눌러 주세요. 레몬 현장 탭의 <b>현장 고르기</b>가 <b>추천 대상 현장(B)</b>의 평수로 비슷한 인텍을 골라 줘요.</p>
+      <div class="site-opts">
+        <label class="check"><input type="checkbox" id="siteUse"> 고른 타입·면적(확인한 도면 비교 포함)을 Claude 글쓰기 참고 자료로 <small class="muted">(본문에 면적 숫자는 쓰지 않게 해요)</small></label>
+      </div>
+      <div class="site-pair" id="siteCards"></div>
+      <div id="siteCmp" class="site-cmp lemon-only"></div>
+    </div>
+  </details>
+
+  <!-- 2. 키워드 -->
+  <div class="panel" data-step="1">
+    <div class="ph"><h2>키워드</h2><span id="kwBasis" class="pill">검색량 미확인</span></div>
+    <div class="kw-current">
+      <div><small>A · 아파트명</small><b id="kwA">-</b></div>
+      <div><small>B · 제목 맨 앞 + 첫·마지막 문단</small><b id="kwB">-</b></div>
+    </div>
+    <div id="kwAudit" class="audit"></div>
+    <div class="btns">
+      <button type="button" id="kwLookup" class="btn">검색량 조회 (네이버 검색광고)</button>
+      <button type="button" id="kwRecommend" class="btn ghost">검색량 기준으로 다시 추천</button>
+      <label class="btn ghost file">CSV 불러오기<input type="file" id="kwCsv" accept=".csv,.tsv,text/csv"></label>
+    </div>
+    <div id="kwStatus" class="status" hidden></div>
+
+    <p id="kwHelp" class="help" hidden>조회가 안 되면: 크롬에서 <b>searchad.naver.com</b>에 로그인 → <b>도구 › 키워드 도구</b> 화면을 열어 둔 채로 다시 눌러주세요. 그래도 안 되면 키워드도구에서 [다운로드]한 CSV를 불러오면 됩니다.</p>
+    <div id="kwTable" class="kw-table"></div>
+  </div>
+
+  <!-- 3. 사진 -->
+  <div class="panel" data-step="2 3" id="photoPanel">
+    <div class="ph"><h2>본문 사진 · 설명</h2><span id="photoCount" class="pill">0장</span></div>
+    <label id="drop" class="drop" data-step="2">
+      <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp,video/*" multiple>
+      <b>사진·동영상을 끌어다 놓거나 클릭해서 선택</b>
+      <span>파일 이름 순서로 들어가요 · 최대 40장</span>
+    </label>
+    <details id="photoStrip" class="pstrip" data-step="2" open hidden>
+      <summary><b>사진 순서 한눈에 보기</b> <span id="pstripSum" class="muted"></span></summary>
+      <div id="pstripRow" class="pstrip-row"></div>
+      <p class="help" style="margin:6px 0 0"><b>번호표</b>를 끌면 묶음 순서 이동 · <b>작은 사진</b>을 다른 상자 위에 놓으면 콜라주로 합치기 · 상자 <b>사이 빈틈</b>에 놓으면 따로 떼기 · 눌러서 아래 카드로 이동</p>
+    </details>
+    <div id="cardTools" class="card-tools" data-step="2 3" hidden>
+      <div class="ct-grp" data-step="2">
+        <div class="ct-row">
+          <button type="button" id="autoFixAll" class="btn primary" title="사진을 한 장씩 살펴보고, 너무 어둡거나 · 너무 밝거나 · 밋밋하거나 · 색이 쏠린(흰 벽이 누렇거나 푸른) 사진만 밝기와 색을 바로잡아요. 알맞은 사진과 직접 조절한 사진은 그대로 둬요. (키친앤코·레몬하우스 모두)">자동 보정</button>
+          <button type="button" id="autoFixUndo" class="btn ghost" hidden title="방금 한 자동 보정을 한 번에 취소해요">자동 보정 되돌리기</button>
+          <button type="button" id="autoPair" class="btn">2장씩 자동 콜라주</button>
+          <button type="button" id="mergeSel" class="btn ghost">체크한 카드 묶기</button>
+        </div>
+        <div class="lemon-only"><div class="ct-row">
+          <button type="button" id="aiFlow" class="btn primary lemon-only" disabled title="[시공 참고 글]에 넣은 카페 링크를 읽고 → Claude가 사진을 보고 공간별로 나눠 콜라주로 묶고 → 그 카페 글을 참고해 글까지 한 번에 써요 (Claude Code 연결 필요)">참고글 읽고 한 번에 자동</button>
+          <button type="button" id="aiGroup" class="btn lemon-only" disabled title="아직 안 읽은 카페 링크가 있으면 먼저 읽고, Claude가 사진을 한 장씩 보고 같은 공간끼리 한 콜라주 카드로 묶어요. 공간 순서는 [내 블로그 문체·서식]의 공간 이름 순서를 따라요 (Claude Code 연결 필요)">공간별로 콜라주 묶기</button>
+          <button type="button" id="aiGroupUndo" class="btn ghost lemon-only" hidden title="방금 한 공간별 묶기를 취소하고 묶기 전 카드로 돌려요">공간별 묶기 되돌리기</button>
+          <label class="check" style="margin:0" title="묶은 뒤 이어서 [Claude로 자동 작성]까지 한 번에 해요 (공간은 이미 정해져 있어 다시 나누지 않아요)"><input type="checkbox" id="aiGroupWrite"> 묶은 뒤 바로 글 쓰기</label>
+        </div></div>
+        <details class="more wz-fold"><summary>사진 색·수평 한꺼번에 맞추기 <small>(필요할 때만)</small></summary>
+          <div class="ct-row" style="margin-top:8px">
+            <button type="button" id="autoLevelAll" class="btn ghost" title="사진마다 가구 모서리·문틀 같은 가로·세로 직선을 찾아 기울기와 세로·가로 원근을 자동으로 맞춰요 (직선이 적은 사진은 건드리지 않아요)">모든 사진 수평·수직 자동 맞춤</button>
+            <button type="button" id="autoToneAll" class="btn ghost" title="사진마다 밝기 분포와 색 쏠림을 보고 노출·대비·색온도 등을 라이트룸처럼 자동으로 맞춰요 (이미 알맞은 사진은 그대로)">모든 사진 색톤 자동 맞춤</button>
+            <label class="check" style="margin:0"><input type="checkbox" id="autoLevelOn"> 올릴 때 자동 수평</label>
+          </div>
+        </details>
+        <span class="help">사진을 다른 사진 <b>가운데</b>에 끌어다 놓으면 콜라주 · <b>위/아래 끝</b>에 놓으면 순서 이동</span>
+      </div>
+      <div class="ct-grp" data-step="3">
+        <div class="ct-row">
+          <button type="button" id="shuffle" class="btn ghost kk-only">문장 다시 섞기</button>
+          <label class="check kk-only" style="margin:0"><input type="checkbox" id="lineBreak" checked> 설명 첫 문장 뒤 줄바꿈</label>
+          <button type="button" id="tidyNow" class="btn ghost" title="지금 모든 문단의 줄을 정리해서 글 칸에 반영해요 (보낼 때도 자동으로 해요)">줄 정리</button>
+        </div>
+        <details class="more wz-fold"><summary>보낼 때 줄 정리 설정 <small>(처음 한 번 맞춰 두면 돼요)</small></summary>
+          <span class="tidy-row" style="display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px">
+            <label class="check" style="margin:0" title="네이버는 한 줄 폭을 넘는 글을 글자 단위로 아무 데서나 꺾어서 '완성 / 되었으며'처럼 말이 갈라져요. 보내기 전에 글을 한 줄이 폭 안에 들어오게 미리 나눠 둬요."><input type="checkbox" id="optTidy" checked> 보낼 때 줄 자동 정리</label>
+            <label class="check" style="margin:0;white-space:nowrap" title="없이 이어 쓰기: 한 문단 안의 줄바꿈을 모두 없애 한 덩어리로 보내요(네이버 화면 폭에 맞춰 저절로 줄이 바뀌어요). 문장마다 줄바꿈: 문장 하나를 한 줄로 보내요."> 줄바꿈 <select id="lineMode"><option value="join">없이 이어 쓰기</option><option value="sentence">문장마다 줄바꿈</option></select></label>
+            <label class="check" id="lineMaxWrap" style="margin:0;white-space:nowrap" title="[문장마다 줄바꿈]일 때만 써요. 한 줄이 이 글자 수(띄어쓰기 포함)를 넘으면 쉼표·이어 주는 말에서 나눠요. 네이버에서 아직 중간에 꺾이면 줄이고, 줄이 너무 짧게 끊기면 늘려 보세요."> 한 줄 최대 <input type="number" id="lineMax" min="20" max="120" step="2" value="50" style="width:58px"> 자</label>
+          </span>
+        </details>
+      </div>
+    </div>
+    <div id="groupStatus" class="status lemon-only" data-step="2" hidden style="margin:10px 0 0"></div>
+    <div id="autoFixStatus" class="status" data-step="2" hidden style="margin:10px 0 0;white-space:pre-line"></div>
+    <div id="cards" class="cards"></div>
+  </div>
+
+  <!-- 4. 대표사진 -->
+  <details class="panel fold" id="coverPanel" data-step="4">
+    <summary><h2>대표사진 1:1</h2><span class="pill">1080 × 1080</span><span class="fold-hint">펼치기</span></summary>
+    <div class="cover">
+      <div class="cover-canvas"><canvas id="coverCanvas" width="1080" height="1080"></canvas><p id="coverEmpty" class="muted">사진 카드에서 [대표]를 눌러 고르세요.</p></div>
+      <div class="cover-ctl">
+        <label class="field">맞춤 방식<select id="cover_fit"><option value="cover">꽉 채우기 (가장자리 잘림)</option><option value="contain">사진 전체 보이기 (흰 여백)</option></select></label>
+        <label class="field">확대<input id="cover_zoom" type="range" min="80" max="200" value="100"></label>
+        <label class="field">좌우 위치<input id="cover_x" type="range" min="-100" max="100" value="0"></label>
+        <label class="field">상하 위치<input id="cover_y" type="range" min="-100" max="100" value="0"></label>
+        <div class="btns"><button type="button" id="coverReset" class="btn ghost">위치 초기화</button><button type="button" id="coverDownload" class="btn ghost">JPG 저장</button></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 5. 동영상 -->
+  <div class="panel" data-step="4" id="videoPanel">
+    <div class="ph"><h2>동영상</h2><span class="pill">글 맨 아래 · 자동 업로드</span></div>
+    <label class="drop small-drop" id="videoBox"><input id="videoInput" type="file" accept="video/*"><b id="videoName">동영상 파일을 끌어다 놓거나 눌러서 선택 (선택 사항)</b><span>MP4 · MOV 등 · 사진과 함께 끌어다 놓아도 돼요</span></label>
+    <video id="videoPreview" controls hidden></video>
+    <div id="videoFields" hidden>
+      <label class="field">동영상 제목 <small>비우면 블로그 제목과 같게</small><input id="videoTitle" placeholder=""></label>
+      <label class="field">동영상 태그 <small>쉼표로 구분 · 비우면 해시태그와 같게 (최대 10개)</small><textarea id="videoTags" rows="2" placeholder=""></textarea></label>
+      <button type="button" id="videoClear" class="btn ghost" hidden>동영상 빼기</button>
+    </div>
+  </div>
+</section>
+
+<aside class="side">
+  <details class="panel lemon-only lp" id="lemonProfile" data-step="3">
+    <summary><h2>내 블로그 문체·서식</h2><span class="pill" id="lpPill">블로그를 골라 주세요</span><span class="fold-hint">펼치기</span></summary>
+    <p class="help" style="margin:0 0 10px">블로그마다 글 틀과 말투가 달라서 <b>블로그 번호별로 따로 저장</b>돼요. 한 번 맞춰 두면 다음 글부터 자동으로 적용됩니다.</p>
+    <div class="lp-step">
+      <b>① 내 글에서 서식 가져오기</b>
+      <p class="help">크롬에서 내 블로그에 이미 올린 글 하나를 <b>[수정]</b>으로 열어 둔 뒤 아래 버튼을 누르세요. 글은 바뀌지 않아요. 소제목 모양, 글자 색, 정렬, 구분선, 마무리 문단과 말투 예시를 읽어 와요.</p>
+      <button type="button" id="lpCapture" class="btn">내 글에서 서식·문체 가져오기</button>
+      <div id="lpCapStatus" class="status" hidden></div>
+    </div>
+    <div class="lp-step">
+      <b>② 문체 예시</b> <small>내 블로그 글을 붙여넣으세요 · 여러 글이면 <code>=====</code> 줄로 나누기</small>
+      <textarea id="lpSamples" rows="6" placeholder="①을 하면 자동으로 들어가요. 다른 글을 더 붙여넣으면 말투를 더 잘 따라 써요."></textarea>
+      <div class="grid2">
+        <label class="field">말투 메모 <small>선택</small><input id="lpTone" placeholder="예: ~했는데요 / ~추천드립니다~! · 이모지 가끔"></label>
+        <label class="field">문단 길이 <small>줄 수</small><input id="lpLines" placeholder="3~4"></label>
+      </div>
+    </div>
+    <div class="lp-step">
+      <b>③ 글 틀</b> <small>{region} 지역 · {apt} 아파트명 · {subtitle} 부제로 바뀌어요</small>
+      <label class="field">제목 형식<input id="lpTitle" placeholder="{region} 인테리어 추천 | {apt}, {subtitle}"></label>
+      <label class="field">부제 후보 <small>한 줄에 하나 · 비우면 제목은 Claude가 써요</small><textarea id="lpSubs" rows="2"></textarea></label>
+      <label class="field">인사말<textarea id="lpGreet" rows="4"></textarea></label>
+      <label class="field">공간 이름 순서 <small>사진 순서대로 소제목이 붙어요 · 쉼표로 구분</small><input id="lpSpaces"></label>
+      <div class="grid2">
+        <label class="field">소제목 모양<select id="lpHeadMode"><option value="auto">가져온 서식대로 (없으면 글자로)</option><option value="text">글자로 (아래 모양)</option><option value="none">소제목 없음</option></select></label>
+        <label class="field">글자 소제목 모양 <small>{name} = 공간 이름</small><input id="lpHeadWrap" placeholder="{name}"></label>
+      </div>
+      <div class="grid2">
+        <label class="field">키워드 강조<select id="lpEmph"><option value="auto">가져온 서식대로</option><option value="bold">굵게</option><option value="off">강조 안 함</option></select></label>
+        <label class="field">추가 해시태그 <small>쉼표로 구분 · {apt} {region} 가능</small><input id="lpTags" placeholder="예: {region}아파트"></label>
+      </div>
+      <label class="field">동영상 제목 뒤에 붙일 말 <small>선택 · 예: (15892)</small><input id="lpVideoSuf"></label>
+      <details class="more"><summary>마무리 문단·전화번호 직접 쓰기 <small>(①에서 가져왔으면 필요 없어요)</small></summary>
+        <label class="field">마무리 문단<textarea id="lpClosing" rows="3"></textarea></label>
+        <div class="grid2">
+          <label class="field">전화번호 줄<input id="lpPhone" placeholder="예: T.1644-0402"></label>
+          <label class="field">전화번호 글자색<input id="lpPhoneColor" type="color" value="#f26522"></label>
+        </div>
+      </details>
+    </div>
+    <div class="btns">
+      <button type="button" id="lpSave" class="btn primary">저장</button>
+      <button type="button" id="lpExport" class="btn ghost">내보내기</button>
+      <label class="btn ghost file">불러오기<input type="file" id="lpImport" accept=".json,application/json"></label>
+      <button type="button" id="lpReset" class="btn ghost">처음 상태로</button>
+    </div>
+    <div id="lpStatus" class="status" hidden></div>
+    <p class="help" id="lpTplInfo" style="margin-top:8px"></p>
+  </details>
+  <div class="panel ai" data-step="3">
+    <div class="ph"><h2>Claude로 사진 보고 쓰기</h2><span class="pill">구독 요금제 · 추가 비용 없음</span></div>
+    <div id="aiSetup" class="status" hidden></div>
+    <div class="btns"><button type="button" id="aiAuto" class="btn primary wide" disabled>Claude로 자동 작성 (사진 보고)</button></div>
+    <label class="check" style="margin:6px 0 0"><input type="checkbox" id="aiPre" checked> 쓰기 전에 사진 보고 공간(내용)부터 나누기 <small>— 30초~1분 더 걸리지만 사진과 문단 내용이 잘 맞아요</small></label>
+    <div class="btns"><button type="button" id="aiClassify" class="btn ghost" disabled>사진 보고 공간만 나누기</button><button type="button" id="aiStop" class="btn ghost" hidden>중지</button></div>
+
+    <details class="howto-box"><summary>직접 채팅에 올리기 (예비 방법)</summary>
+      <ol class="howto">
+        <li><button type="button" id="aiPhotos" class="btn">Claude용 파일 저장</button> 사진+요청문이 ZIP 하나로 저장돼요</li>
+        <li>Claude 채팅에 그 ZIP을 첨부하고 <b>"작성해줘"</b>만 보내기</li>
+        <li>받은 답을 아래에 붙여넣고 <b>[적용]</b></li>
+      </ol>
+    </details>
+    <textarea id="aiResult" rows="4" placeholder="Claude 답을 그대로 붙여넣으세요 ([제목] [1] [2] … 형식)"></textarea>
+    <div class="btns"><button type="button" id="aiApply" class="btn ghost">적용</button><button type="button" id="aiCopy" class="btn ghost">요청문만 복사</button></div>
+    <div id="aiStatus" class="status" hidden></div>
+  </div>
+  <div class="panel" id="titlePanel" data-step="4">
+    <div class="ph tabs"><button type="button" class="tab on" data-tab="title">제목</button><button type="button" class="tab" data-tab="preview">미리보기</button></div>
+    <div id="titleOptions" class="title-opts"></div>
+    <label class="field">직접 입력 <small>입력하면 위 후보 대신 사용</small><input id="title" placeholder="제목을 직접 쓰려면 여기에"></label>
+    <div id="previewPane" hidden><div id="preview" class="preview"></div></div>
+  </div>
+
+  <div class="panel" id="checkPanel" data-step="5">
+    <div class="ph"><h2>원고 점검</h2><span id="checkPill" class="pill">글을 쓰면 점검해요</span></div>
+    <p class="help" style="margin:0 0 6px">면적 표기(㎡·평형 등) · 빈 설명 · 문장 중간 줄바꿈 · 반복 표현을 자동으로 찾아 알려 줘요. 눌러서 그 문단으로 이동해요. (고치지는 않고 표시만 해요)</p>
+    <div id="checkList" class="ck-list"></div>
+  </div>
+
+  <div class="panel send" data-step="5">
+    <div class="ph"><h2>네이버 임시저장</h2></div>
+    <p class="help" style="margin:0 0 10px">버튼 하나로 <b>새 글쓰기 창을 자동으로 열고</b> → 템플릿 순서대로 사진·글 입력 → <b>임시저장</b>까지 합니다. 크롬에 네이버 로그인만 되어 있으면 돼요. (발행은 절대 안 함 · 입력 중에는 그 창을 건드리지 마세요)</p>
+    <div class="send-sched">
+    <div class="row" style="margin-top:0;align-items:center;gap:8px;flex-wrap:wrap">
+      <label class="check" style="margin:0"><input type="checkbox" id="optSched"> 예약 발행 — 임시저장 뒤 발행 창에 카테고리와 예약 시간을 맞춰 두기 (마지막 [발행]은 직접 누르세요)</label>
+      <input type="date" id="optSchedDate"> <select id="optSchedH"><option>00</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option></select> : <select id="optSchedM"><option>00</option><option>10</option><option>20</option><option>30</option><option>40</option><option>50</option></select>
+    </div>
+    </div>
+    <button type="button" id="naverSend" class="btn primary wide">네이버에 입력하고 임시저장</button>
+    <div id="naverStatus" class="status">기존 글은 덮어쓰지 않아요. 열려 있는 글쓰기 화면에 내용이 있으면 새 창을 따로 열어요.</div>
+    <p class="help" id="autoVideoNote" style="margin:8px 0 0"></p>
+    <details class="more wz-fold" id="sendOpts"><summary>보내기 옵션 <small>(로고 · 서식 · 장소 카드 · 자동 영상 — 보통은 그대로 두세요)</small></summary>
+    <label class="check"><input type="checkbox" id="optLogo" checked> <span id="optLogoText">본문 사진에 키친앤코 로고 넣기 (1:1 대표사진은 로고 없이)</span></label>
+    <label class="check kk-only"><input type="checkbox" id="optStyle" checked> 기존 글 서식 그대로 (회색 시공정보·구분선·가운데 정렬·네이버 콜라주)</label>
+    <label class="check"><input type="checkbox" id="optPlace" checked> 장소 카드 넣기 (아파트명으로 검색해 첫 결과)</label>
+    <label class="check lemon-only"><input type="checkbox" id="optLStyle" checked> 내 블로그 서식으로 정리 (<b>내 블로그 문체·서식</b>(③ 글 쓰기)에서 저장한 소제목 모양·가운데 정렬·마무리 문단·네이버 콜라주)</label>
+    <label class="check kk-only"><input type="checkbox" id="optLink" checked> 홈페이지 링크 카드 넣기 (kitchennko.com)</label>
+    <label class="check" style="margin-top:10px"><input type="checkbox" id="optAutoVideo" checked> 동영상 칸이 비어 있으면 사진들로 간단한 영상을 만들어 자동으로 올리기 (사진만 이어 붙인 영상 · 만드는 동안 이 창을 앞에 두세요)</label>
+    </details>
+    <details class="more wz-fold" id="recFold"><summary>시트 기록 <small>(임시저장이 끝나면 자동으로 적혀요 · 못 보내면 여기가 저절로 열려요)</small></summary>
+    <div class="tpl-box kk-only" style="margin-top:14px"><b>발행·예약 후 시트 기록</b>
+        <p class="help"><b>현장 탭에서 보낸 사진으로 쓴 글은 임시저장이 끝나는 순간 자동으로 기록돼요</b> (현장 목록에는 바로 "블로그 올림"으로 보여요). 개인 시트의 <b>블로그(E열)</b>에는 다음 날 아침 Claude 예약 작업이 적고, 모든 품목이 끝났으면 파란색이 돼요. 발행을 안 하기로 했으면 [기록 취소]를 누르세요. 현장 탭 밖에서 쓴 글은 발행·예약을 마친 뒤 아래 버튼을 눌러 주세요.</p>
+        <div id="blogRecSite" class="muted" style="margin:4px 0">현장 탭에서 사진을 보낸 현장이 없어요.</div>
+        <div id="blogRecItems" class="chips"></div>
+        <div class="btns" style="margin-top:8px"><button type="button" id="blogRecSave" class="btn ghost" disabled>발행·예약 완료 → 시트에 기록</button> <button type="button" id="blogRecCancel" class="btn ghost" hidden>기록 취소</button></div>
+        <div id="blogRecStatus" class="status" hidden style="margin-top:8px"></div>
+    </div>
+    <div class="tpl-box kk-only" id="sheetRec" style="margin-top:14px"><b>글 작성이 끝나면 → 구글 블로그 관리 시트(키친앤코 탭)에 기록</b>
+        <p class="help">임시저장이 끝나면 시트의 <b>키친앤코 탭 맨 아래</b>에 한 줄(포스팅 날짜 · 현장명 · 품목 · 키워드)이 적혀요. <b>순위</b>는 알바님이 적는 칸이라 비워 둬요. 같은 현장·같은 품목이 일주일 안에 이미 있으면 새 줄을 만들지 않아요. 현장 탭에서 사진을 보낸 글이면 현장명·품목이 자동으로 들어가고, 아니면 아래 칸에 직접 적어 주세요. 발행한 뒤 <b>글 주소</b>를 링크 칸에 붙여넣고 [시트에 기록]을 다시 누르면 링크 칸이 채워져요.</p>
+        <label class="check"><input type="checkbox" id="ksAuto" checked> 네이버 임시저장이 끝나면 자동으로 기록</label>
+        <div class="grid2">
+          <label class="field">포스팅 날짜 <small>26.10.27 형태 · 예약 발행이면 예약 날짜</small><input id="ksDate" autocomplete="off" placeholder="26.10.27"></label>
+          <label class="field">품목 <small>‘, ’로 구분</small><input id="ksItem" autocomplete="off" placeholder="예: 주방가구"></label>
+        </div>
+        <label class="field">현장명 <small>현장 탭의 폴더 이름 그대로</small><input id="ksSite" autocomplete="off" placeholder="현장 탭에서 [블로그로 보내기]를 하면 자동으로 들어가요"></label>
+        <label class="field">키워드 <small>‘ / ’로 구분</small><input id="ksKw" autocomplete="off" placeholder="예: 명지한신휴플러스 / 명지한신휴플러스 주방가구"></label>
+        <label class="field">링크 <small>선택 · 발행한 글 주소</small><input id="ksLink" autocomplete="off" placeholder="https://blog.naver.com/kitchennko/…"></label>
+        <div class="btns" style="margin-top:8px"><button type="button" id="ksSave" class="btn primary">시트에 기록</button><button type="button" id="ksCopy" class="btn ghost">한 줄 복사</button><button type="button" id="ksRetry" class="btn ghost" hidden>못 보낸 것 다시 보내기</button></div>
+        <div id="ksStatus" class="status" hidden style="margin-top:8px"></div>
+        <div id="rkBox" style="margin-top:14px;padding-top:10px;border-top:1px dashed var(--line,#d9d9d9)">
+          <strong>어제 글 링크 · 네이버 노출 순위 자동 기록</strong>
+          <p class="help">다음 날이 되면 시트에서 링크·순위가 비어 있는 전날(최근 2주) 글을 찾아, 블로그에서 글 주소를 가져오고 네이버에서 두 키워드의 순위를 조회해 <b>“15 / 2”</b>처럼 적어요. 네이버에 안 보이면 <b>-</b>로 적어요. 이미 적힌 칸은 건드리지 않아요.</p>
+          <label class="check"><input type="checkbox" id="rkAuto" checked> 스튜디오를 켤 때 하루 한 번 자동으로 기록</label>
+          <div class="btns" style="margin-top:6px"><button type="button" id="rkRun" class="btn primary">지금 기록하기</button><button type="button" id="rkPreview" class="btn ghost">미리보기 (시트에 쓰지 않음)</button></div>
+          <div id="rkStatus" class="status" hidden style="margin-top:8px"></div>
+          <div id="rkList" class="help" style="margin-top:6px;white-space:pre-wrap"></div>
+          <details class="more" style="margin-top:8px"><summary>순위 조회 방식 (기본: 키 없이 네이버 블로그탭 검색)</summary>
+            <p class="help" id="rkCfgNote">기본은 키 없이 네이버 통합검색의 블로그탭에서 상위 20위 안의 순위를 찾아요. (blog-exposure-check 노출 기록 프로그램과 같은 방식)</p>
+            <label class="field">순위 조회 방식<select id="rkProvider"><option value="tab">블로그탭 검색 (키 필요 없음 · 기본)</option><option value="hub">NAVER API HUB 키</option><option value="legacy">예전 개발자센터 키</option></select></label>
+            <p class="help" id="rkTabHelp">네이버가 막지 않도록 검색 사이를 2.5초씩 쉬어요. 20위 안에 없으면 <b>-</b>로 적어요. 너무 자주 조회하면 네이버가 잠시 막을 수 있어서 하루 한 번만 자동으로 돌아요.</p>
+            <div id="rkKeys" hidden>
+              <p class="help">API 키로 조회하려는 분만 쓰세요. <b>NAVER API HUB</b>: 네이버 클라우드 플랫폼 콘솔 → All Services → Application Services → NAVER API HUB → 신청하기 → Application 등록(사용 API: 검색) → [인증 정보]의 Client ID/Secret. 순위는 블로그 검색(정확도순) 상위 300건 안에서 찾은 값이라 실제 검색 화면과 조금 다를 수 있어요.</p>
+              <label class="field">Client ID<input id="rkId" autocomplete="off"></label>
+              <label class="field">Client Secret<input id="rkSecret" type="password" autocomplete="off"></label>
+            </div>
+            <div class="btns"><button type="button" id="rkSave" class="btn ghost">저장</button></div>
+          </details>
+        </div>
+        <details class="more" style="margin-top:8px"><summary>시트 연결 설정 (처음 한 번만)</summary>
+          <p class="help" id="ksCfgNote">아직 연결 전이에요.</p>
+          <label class="field">구글 시트 연결 주소 <small>Apps Script 웹 앱 URL (레몬하우스와 같은 주소를 같이 써요)</small><input id="ksUrl" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec"></label>
+          <label class="field">시트 연결 비밀번호 <small>스크립트의 KEY와 같게</small><input id="ksKey" type="password" autocomplete="off"></label>
+          <div class="btns"><button type="button" id="ksSaveSet" class="btn ghost">저장</button><button type="button" id="ksPing" class="btn ghost">시트 연결 확인</button></div>
+          <div id="ksSetStatus" class="status" hidden style="margin-top:8px"></div>
+        </details>
+    </div>
+    <div class="tpl-box lemon-only" id="lemonRec" style="margin-top:14px"><b>글 작성이 끝나면 → 구글 시트에 기록</b>
+        <p class="help" id="lrHint">블로그 관리 시트의 <b>내 블로그 탭</b>에 한 줄이 적혀요. 칸은 미리 채워 두었으니 확인하고 고쳐 주세요.</p>
+        <div class="grid2">
+          <label class="field">포스팅 날짜 <small>26.10.27 형태</small><input id="lrDate" autocomplete="off" placeholder="26.10.27"></label>
+          <label class="field">내 블로그 탭<input id="lrTab" readonly></label>
+        </div>
+        <label class="field">현장명(인텍) <small>사진을 가져온 폴더 이름 그대로</small><input id="lrSite" autocomplete="off" placeholder="레몬 현장 탭에서 [가져오기]를 하면 자동으로 들어가요"></label>
+        <label class="field">추천글 현장 <small>글 제목에 쓴 아파트 (위 ‘아파트명’)</small><input id="lrApt" autocomplete="off"></label>
+        <label class="field">지역 <small>비워 두면 시트에 미리 적힌 지역을 그대로 둬요</small><input id="lrRegion" autocomplete="off" placeholder="예: 마산 추천글"></label>
+        <label class="field">키워드 <small>‘ / ’로 구분</small><input id="lrKw" autocomplete="off" placeholder="예: 마산 메트로시티 / 마산 메트로시티 인테리어"></label>
+        <label class="field">링크 <small>선택 · 발행한 글 주소를 붙여넣고 [시트에 기록]을 다시 누르면 링크 칸이 채워져요</small><input id="lrLink" autocomplete="off" placeholder="https://blog.naver.com/…"></label>
+        <label class="check"><input type="checkbox" id="lrAuto" checked> 네이버 임시저장이 끝나면 자동으로 기록 (같은 날짜·같은 추천글 현장이 이미 있으면 새 줄을 만들지 않아요)</label>
+        <div class="btns" style="margin-top:8px"><button type="button" id="lrSave" class="btn primary">시트에 기록</button><button type="button" id="lrCopy" class="btn ghost">한 줄 복사</button><button type="button" id="lrRetry" class="btn ghost" hidden>못 보낸 것 다시 보내기</button></div>
+        <div id="lrStatus" class="status" hidden style="margin-top:8px"></div>
+        <div id="lrkBox" style="margin-top:14px;padding-top:10px;border-top:1px dashed var(--line,#d9d9d9)">
+          <strong>어제 글 노출 순위 자동 기록</strong>
+          <p class="help">위에서 고른 <b>내 블로그 탭</b>에서 <b>순위 칸이 비어 있는 전날(최근 2주) 글</b>을 찾아, 네이버 블로그탭에서 키워드(최대 3개)별 순위를 조회해 <b>“1 / 2 / 1”</b>처럼 적어요. 20위 안에 안 보이면 <b>-</b>로 적어요. 링크 칸이 비어 있으면 블로그 글 주소도 같이 채워요. 이미 적힌 칸은 건드리지 않아요.</p>
+          <label class="check"><input type="checkbox" id="lrkAuto" checked> 스튜디오를 켤 때 하루 한 번 자동으로 기록 (레몬하우스 화면일 때)</label>
+          <div class="btns" style="margin-top:6px"><button type="button" id="lrkRun" class="btn primary">지금 기록하기</button><button type="button" id="lrkPreview" class="btn ghost">미리보기 (시트에 쓰지 않음)</button></div>
+          <div id="lrkStatus" class="status" hidden style="margin-top:8px"></div>
+          <div id="lrkList" class="help" style="margin-top:6px;white-space:pre-wrap"></div>
+          <p class="help">처음 한 번: 이 폴더의 <b>블로그시트연결.gs</b>를 시트 Apps Script에 다시 붙여넣고 <b>새 버전으로 배포</b>해야 해요 (맨 위 KEY와 웹 앱 주소는 그대로). 순위 조회 방식(키 없이 블로그탭 검색)은 키친앤코 화면의 설정과 같이 써요.</p>
+        </div>
+    </div>
+    </details>
+    <div class="btns small">
+      <button type="button" id="copyTags" class="btn ghost">해시태그 복사</button>
+      <details class="more"><summary>더보기</summary>
+        <div class="btns small">
+          <button type="button" id="copyVideo" class="btn ghost">동영상 제목·태그 복사</button>
+          <button type="button" id="copyTitle" class="btn ghost">제목 복사</button>
+          <button type="button" id="copyAll" class="btn ghost">전체 원고 복사</button>
+          <button type="button" id="zipPack" class="btn ghost">사진+원고 ZIP</button>
+        </div>
+      </details>
+    </div>
+    <p class="muted tags-line" id="tagsPreview"></p>
+  </div>
+
+  </aside>
+<div class="wz-nav" id="blogNav"></div>
+</main>
+<!-- ───── 현장 탭 (개인 시트 읽기 전용) ───── -->
+<main id="hubSites" class="hub" hidden>
+  <div class="panel">
+    <div class="ph"><h2>현장 현황</h2><span id="stCount" class="pill">-</span><span class="muted">개인 시트(26년 키코.xlsx)를 읽기만 해요 · 시트 기록은 Claude 예약 작업이 해요</span></div>
+    <div class="st-tools">
+      <div class="seg" id="stSeg"><button type="button" data-f="insta" class="on">인스타 남음</button><button type="button" data-f="blog">블로그 남음</button><button type="button" data-f="seoul">서울</button><button type="button" data-f="all">전체</button></div>
+      <label class="st-toggle" id="stNoSeoulBox" title="서울 현장을 목록에서 빼고 봐요 (어느 필터에서든 쓸 수 있어요)"><input type="checkbox" id="stNoSeoul"> 서울 현장 제외</label>
+      <select id="stTab" style="width:auto"><option value="all">레몬 + 단독</option><option value="26레몬현장">26레몬현장</option><option value="26키코단독">26키코단독</option></select>
+      <input id="stSearch" placeholder="현장 이름 검색" autocomplete="off">
+      <button type="button" id="stReload" class="btn ghost">새로고침</button>
+    </div>
+    <div class="table-wrap"><table class="st-table">
+      <thead><tr><th>현장</th><th>가구 품목</th><th>블로그</th><th>인스타 데일리</th><th>사진</th><th></th></tr></thead>
+      <tbody id="stBody"><tr><td colspan="6" class="st-empty">-</td></tr></tbody>
+    </table></div>
+  </div>
+</main>
+
+<!-- ───── 카페 공사전·중 탭 (레몬하우스 모드) — 별도 프로그램 "카페 공사중 자동 발행"을 Studio가 같이 켜고 그 화면을 넣어 보여 줘요 ───── -->
+<main id="hubCafe" class="hub cafe-hub" hidden>
+  <div class="cafe-bar">
+    <b>카페 공사전·중</b>
+    <button type="button" id="cafeReload" class="btn ghost" title="아래 화면만 다시 불러와요">화면 새로고침</button>
+    <a id="cafeNew" class="btn ghost" href="#" target="_blank" rel="noopener" hidden>새 창으로 열기</a>
+    <details class="more cafe-set"><summary>프로그램 위치</summary>
+      <p class="help">카페 프로그램(카페 공사중 자동 발행)이 들어 있는 폴더예요. 비워 두면 <b>문서\cafe-construction-poster</b>를 써요. 카페 설정·로그인·말투 자료·작업 기록은 그 폴더에 그대로 있어요.</p>
+      <label class="field">폴더 위치<input id="cafeDir" autocomplete="off" spellcheck="false" placeholder="C:\Users\…\Documents\cafe-construction-poster"></label>
+      <div class="btns"><button type="button" id="cafeDirSave" class="btn ghost">저장하고 다시 켜기</button></div>
+    </details>
+  </div>
+  <div id="cafeStatus" class="status" hidden></div>
+  <div class="btns" id="cafeRetryRow" hidden><button type="button" id="cafeRetry" class="btn primary">카페 프로그램 켜기</button></div>
+  <iframe id="cafeFrame" title="카페 공사전·중" src="about:blank" hidden allow="clipboard-read; clipboard-write"></iframe>
+</main>
+
+<!-- ───── 레몬 현장 탭 (레몬하우스 모드) ───── -->
+<main id="hubLemon" class="hub" hidden>
+<div class="hub-grid">
+<div class="wz-bar" id="lmSteps"></div>
+<div class="wz-desc" id="lmStepsDesc"><span class="wz-desc-t"></span><button type="button" class="link wz-mode"></button></div>
+<section class="hub-main">
+  <div class="panel" data-step="1">
+    <div class="ph"><h2>내 블로그와 인텍 번호 고르기</h2><span id="lmConn" class="pill">확인 중…</span></div>
+    <div class="grid2">
+      <label class="field">내 블로그 <small>사진을 옮겨 둘 ★번호 폴더 · 시트 탭이 정해져요</small><select id="lmBlog"></select></label>
+      <div class="field"><span>내 블로그 폴더</span><div id="lmMyFolder" class="lm-folder muted">-</div></div>
+    </div>
+    <div class="field"><span>인텍 번호 <small>폴더 이름 끝의 ‘인텍3’ 같은 표시예요 · 여러 개 골라도 돼요 · 고르지 않으면 전체</small></span><div id="lmIntek" class="chips lm-chips"></div></div>
+  </div>
+  <div class="panel" id="lmMatch" data-step="2">
+    <div class="ph"><h2>현장 고르기</h2><span id="lmCount" class="pill">-</span><span class="muted">0. 레몬하우스 배포용</span></div>
+    <div id="lmTarget" class="lm-target"></div>
+    <div class="lm-match-ctl">
+      <label class="field">평수 허용 범위 <small>± 몇 평까지 비슷하게 볼지</small><input id="lmMatchTol" type="number" min="1" max="15" step="1" value="5"></label>
+      <label class="field">평수 직접 입력 <small>부동산 찾기를 안 쓸 때 · 34 또는 34A 적고 Enter</small><span class="lm-py"><input id="lmMatchPy" autocomplete="off" placeholder="예: 34A"><button type="button" id="lmMatchPyBtn" class="btn ghost">적용</button></span></label>
+    </div>
+    <label class="check" style="margin:2px 0 6px"><input type="checkbox" id="lmMatchUsed"> 이름 앞에 (X) 표시가 붙은 폴더도 후보에 넣기 <small class="muted">(보통 이미 쓴 현장이라 빼요)</small></label>
+    <div id="lmMatchBox" hidden>
+      <div id="lmMatchSummary" class="help" style="margin:8px 0 4px"></div>
+      <div class="table-wrap"><table class="st-table lm-table"><tbody id="lmMatchOut"></tbody></table></div>
+      <h3 class="lm-sub">전체 현장</h3>
+    </div>
+    <div class="st-tools">
+      <input id="lmSearch" placeholder="현장·동·아파트 이름 검색" autocomplete="off">
+      <label class="check" style="margin:0"><input type="checkbox" id="lmEmpty"> 사진이 없는 폴더도 보기</label>
+      <button type="button" id="lmReload" class="btn ghost">새로고침</button>
+    </div>
+    <div class="table-wrap"><table class="st-table lm-table">
+      <thead><tr><th>현장 폴더</th><th>인텍</th><th>사진</th><th></th></tr></thead>
+      <tbody id="lmBody"><tr><td colspan="4" class="st-empty">-</td></tr></tbody>
+    </table></div>
+  </div>
+  <details class="panel fold" id="lmMinePanel" data-step="2" hidden>
+    <summary><h2>이미 내 폴더로 가져온 현장</h2><span id="lmMineCount" class="pill">-</span><span class="fold-hint">펼치기</span></summary>
+    <p class="help" style="margin:0 0 8px">내 ★번호 폴더에 이미 들어 있는 현장이에요. 새로 고를 현장은 위쪽 ‘현장 고르기’에서 고르고, 여기는 다시 반전·각인해서 받고 싶을 때만 열어 쓰세요.</p>
+    <div class="table-wrap"><table class="st-table lm-table"><tbody id="lmMineBody"></tbody></table></div>
+  </details>
+</section>
+<aside class="hub-side">
+  <div class="panel" data-step="2">
+    <div class="ph"><h2>진행 상황</h2></div>
+    <div id="lmProg" class="lm-prog muted">현장 옆 <b>[가져오기]</b>를 누르면<br>① 내 블로그 폴더로 이동 ② 사진 읽기 ③ 가로 반전 + 레몬하우스 각인 ④ 컴퓨터에 저장 ⑤ 블로그 화면에 넣기까지 한 번에 해요.</div>
+  </div>
+  <details class="panel fold" id="lmSetPanel" data-step="1" data-wzfold>
+    <summary><h2>연결 설정 <small class="muted">폴더 위치 · 구글 시트</small></h2><span id="lmSetPill" class="pill"></span><span class="fold-hint">펼치기</span></summary>
+    <div class="lm-set-body">
+    <label class="field">레몬하우스 배포용 폴더 <small>비워 두면 OneDrive에서 자동으로 찾아요</small><input id="lmDist" autocomplete="off" placeholder="예: C:\Users\내이름\OneDrive\0. 레몬하우스 배포용"></label>
+    <label class="field">★번호 폴더들이 있는 폴더 <small>★1. … ★9. … 폴더가 들어 있는 바깥 폴더 (★9 폴더 자체가 아니에요) · 비우면 자동</small><input id="lmBlogRoot" autocomplete="off"></label>
+    <label class="field">사진 저장 위치<input id="lmSave" autocomplete="off"></label>
+    <label class="field">구글 시트 연결 주소 <small>Apps Script 웹 앱 URL</small><input id="lmSheetUrl" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec"></label>
+    <label class="field">시트 연결 비밀번호 <small id="lmKeyHint">스크립트의 KEY와 같게</small><input id="lmSheetKey" type="password" autocomplete="off"></label>
+    <div class="btns"><button type="button" id="lmSaveSet" class="btn ghost">저장</button><button type="button" id="lmFind" class="btn ghost">자동으로 다시 찾기</button><button type="button" id="lmPing" class="btn ghost">시트 연결 확인</button></div>
+    <div id="lmSetStatus" class="status" hidden style="margin-top:8px"></div>
+    </div>
+  </details>
+</aside>
+<div class="wz-nav" id="lmNav"></div>
+</div>
+</main>
+
+<!-- ───── 인스타 탭 ───── -->
+<main id="hubInsta" class="hub" hidden>
+<div class="hub-grid ig-grid">
+<div class="wz-bar" id="igSteps"></div>
+<div class="wz-desc" id="igStepsDesc"><span class="wz-desc-t"></span><button type="button" class="link wz-mode"></button></div>
+<section class="hub-main">
+  <div class="panel" data-step="1">
+    <div class="ph"><h2>올릴 현장</h2><span class="muted">아직 안 올린 품목이 있는 현장 · 한 번도 안 올린 현장 먼저</span><button type="button" id="igReload" class="tiny">새로고침</button></div>
+    <div id="igRecs" class="recs"><p class="muted">-</p></div>
+  </div>
+
+  <details class="panel fold" id="igMarkBox" data-step="1">
+    <summary><h2>이미 직접 올렸어요 → 시트에 기록</h2><span id="igMarkCnt" class="pill wait" hidden></span><span class="fold-hint">펼치기</span></summary>
+    <p class="help" style="margin:0 0 10px">스튜디오 밖(인스타 앱 등)에서 올린 글을 엑셀 데일리 칸에 적어 달라고 요청해요. 다음 아침 예약 작업이 적고, 그때 엑셀은 닫혀 있어야 해요.</p>
+    <label class="field">현장<select id="igMarkSite"><option value="">시트 읽는 중…</option></select></label>
+    <div class="field">올린 품목 <small>같은 게시물에 함께 올린 품목을 모두 눌러 주세요</small><div id="igMarkItems" class="chips"><span class="muted">현장을 먼저 고르세요.</span></div></div>
+    <div class="btns"><button type="button" id="igMarkSave" class="btn ghost" disabled>시트에 기록 요청</button></div>
+    <div id="igMarkStatus" class="status" hidden></div>
+    <div id="igMarkList" class="mk-list"></div>
+  </details>
+
+  <div class="panel" id="igPick" data-step="2" hidden>
+    <div class="ph"><h2 id="pkTitle">사진 고르기</h2><div class="seg" id="pkView" hidden title="시트 분류가 안 맞을 땐 [전체 사진]으로 보세요"><button type="button" data-v="group">품목별</button><button type="button" data-v="all">전체 사진</button></div><span id="pkCount" class="pill">0장 고름</span></div>
+    <p id="pkNote" class="help" style="margin:-6px 0 8px"></p>
+    <div id="pgrid"></div>
+    <div class="btns" style="margin-top:12px"><button type="button" id="pkClear" class="btn ghost">고른 사진 비우기</button><button type="button" id="pkBlog" class="btn ghost">이 현장 사진을 블로그로 보내기</button></div>
+  </div>
+
+  <div class="panel" data-step="3">
+    <div class="ph"><h2 id="igCropTitle">4:5 사진</h2><span id="igCropCount" class="pill">0장</span></div>
+    <div class="ratio-row"><span class="muted">사진 비율</span><div class="seg ratio-seg" data-ratio-seg></div></div>
+    <label id="igDrop" class="drop small-drop"><input id="igFile" type="file" accept="image/jpeg,image/png,image/webp" multiple><b>다른 사진을 직접 넣으려면 끌어다 놓거나 클릭</b><span>위에서 고른 사진은 자동으로 여기에 들어와요 · 최대 10장</span></label>
+    <div id="igCropPanel" hidden>
+      <p class="help">사진을 <b>끌어서</b> 보일 부분을 맞추세요. 첫 번째 사진이 대표(피드에 보이는 사진)예요. <b>본문을 쓰는 중이라면 미리보기에서 화살표만 눌러 똑같이 고칠 수 있어요.</b></p>
+      <div id="igCrops" class="crops" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <div class="panel" data-step="4">
+    <div class="ph"><h2>캡션</h2></div>
+    <div class="grid2">
+      <label class="field">아파트명 <small>본문 맨 위 #해시태그가 돼요</small><input id="igApt" placeholder="예: 대연힐스테이트푸르지오" autocomplete="off"></label>
+      <label class="field">인테리어 업체 <small id="igInteriorHint">레몬하우스가 아닌 업체가 공사했을 때만</small><input id="igInterior" placeholder="예: @clever__interior_" autocomplete="off"></label>
+    </div>
+    <label class="field">사진 크레딧 <small>요청이 있을 때만 · 인테리어 업체 줄 아래에 들어가요</small><input id="igCredit" placeholder="예: 📷 by @hwan_stu" autocomplete="off"></label>
+    <label class="check"><input type="checkbox" id="igSeoul"> 서울 현장 — 본문에 #해시태그를 넣지 않고, 게시 후 댓글 ✨ 아래 대댓글로 달아요</label>
+    <div class="field">이번 글 품목 <small>올린 뒤 시트 데일리 칸에 이 품목이 기록돼요</small><div id="igItems" class="chips"></div></div>
+    <div class="field">가구 컬러 <small>고르면 그 컬러로 써요</small><div id="igTones" class="chips"></div></div>
+    <label class="field">메모 <small>강조할 점</small><input id="igMemo" placeholder="예: 화장대 위주, 간접조명 강조" autocomplete="off"></label>
+    <div class="btns"><button type="button" id="igGen" class="btn primary">Claude로 캡션 3안 만들기 (사진 보고)</button><button type="button" id="igStop" class="btn ghost" hidden>중지</button></div>
+    <div id="igGenStatus" class="status" hidden style="margin-top:8px"></div>
+    <div id="igOpts" class="opts"></div>
+    <label class="field">본문 (2문장) <small>직접 고쳐도 돼요</small><textarea id="igBody" rows="4" placeholder="캡션 3안 중 하나를 고르거나 직접 쓰세요"></textarea></label>
+    <div class="grid2" style="grid-template-columns:1fr auto;align-items:end">
+      <label class="field" style="margin:0">고쳐 달라고 하기 <small>요청은 다음 캡션부터 기억해요</small><input id="igRefine" placeholder="예: 화이트 말고 아이보리로, 간접조명 이야기 빼줘" autocomplete="off"></label>
+      <button type="button" id="igRefineBtn" class="btn ghost">다시 쓰기</button>
+    </div>
+  </div>
+</section>
+
+<aside class="hub-side">
+  <div class="panel igv-panel" data-step="3 4 5">
+    <div class="ph"><h2>미리보기</h2><span id="igPvNum" class="pill">0/0</span><div class="seg ratio-seg" data-ratio-seg title="사진 비율"></div></div>
+    <div class="ig-preview">
+      <div class="ig-stage" id="igStage" tabindex="0" aria-label="인스타 미리보기 — 좌우 화살표 키로 사진을 넘겨요">
+        <canvas id="igPrevCanvas" width="540" height="675"></canvas>
+        <button type="button" class="ig-nav prev" id="igPrevBtn" aria-label="이전 사진">‹</button>
+        <button type="button" class="ig-nav next" id="igNextBtn" aria-label="다음 사진">›</button>
+        <span class="ig-badge" id="igBadge"></span>
+        <span class="ig-grab" id="igGrab"></span>
+      </div>
+      <div id="igDots" class="ig-dots"></div>
+      <div id="igThumbs" class="ig-thumbs"></div>
+      <div id="igTools" class="ig-tools" hidden>
+        <div class="tl"><span class="lb">보일 부분</span>
+          <button type="button" class="tb" data-pos="-1,0" title="왼쪽 부분 보기">◀</button><button type="button" class="tb" data-pos="0,-1" title="위쪽 부분 보기">▲</button><button type="button" class="tb" data-pos="0,1" title="아래쪽 부분 보기">▼</button><button type="button" class="tb" data-pos="1,0" title="오른쪽 부분 보기">▶</button>
+          <button type="button" class="tb txt" id="igReset" title="위치·확대를 처음대로">처음대로</button></div>
+        <div class="tl"><span class="lb">확대</span>
+          <button type="button" class="tb" data-zm="-1" title="줄이기">−</button><span class="zv" id="igZoomVal">100%</span><button type="button" class="tb" data-zm="1" title="확대">＋</button></div>
+        <div class="tl"><span class="lb">순서</span>
+          <button type="button" class="tb txt" data-mvp="-1">← 앞으로</button><button type="button" class="tb txt" data-mvp="1">뒤로 →</button>
+          <button type="button" class="tb txt danger" id="igRemove" title="이 사진을 게시물에서 빼요">✕ 빼기</button></div>
+        <div class="tl adj"><span class="lb">밝기</span><input type="range" min="-50" max="50" step="1" value="0" data-adj="br" aria-label="밝기"><span class="zv" data-adjv="br">0</span></div>
+        <div class="tl adj"><span class="lb">대비</span><input type="range" min="-50" max="50" step="1" value="0" data-adj="ct" aria-label="대비"><span class="zv" data-adjv="ct">0</span></div>
+        <div class="tl adj"><span class="lb">채도</span><input type="range" min="-100" max="100" step="1" value="0" data-adj="sa" aria-label="채도"><span class="zv" data-adjv="sa">0</span></div>
+        <div class="tl"><span class="lb"></span><button type="button" class="tb txt" id="igAdjAll" title="지금 사진의 밝기·대비·채도를 모든 사진에 똑같이 적용해요">모든 사진에 적용</button><button type="button" class="tb txt" id="igAdjReset">색 처음대로</button></div>
+        <p class="hint">사진을 손가락·마우스로 <b>끌어서</b> 위치를 맞춰요. 화살표를 꾹 누르고 있어도 돼요. 밝기·대비·채도는 올라가는 사진에 그대로 적용돼요(막대를 두 번 누르면 0).</p>
+      </div>
+      <div id="igCap" class="ig-cap"></div>
+    </div>
+  </div>
+  <div class="panel send" data-step="5">
+    <div class="ph"><h2>예약</h2></div>
+    <label class="field">게시 날짜 <small id="igDateHint"></small><input id="igDate" type="date"></label>
+    <label class="check"><input type="checkbox" id="igStory" checked> 올린 뒤 스토리에도 자동 공유 (첫 사진)</label>
+    <button type="button" id="igNow" class="btn primary wide">지금 바로 발행</button>
+    <button type="button" id="igSave" class="btn ghost wide" style="margin-top:6px">예약 저장 (평일 아침 자동 게시)</button>
+    <div class="btns small"><button type="button" id="igCopy" class="btn ghost">글 전체 복사</button></div>
+    <div id="igSaveStatus" class="status" hidden style="margin-top:8px"></div>
+  </div>
+  <div class="panel" id="igQueuePanel" data-step="5">
+    <div class="ph"><h2>예약 목록</h2><button type="button" id="igQueueReload" class="tiny">새로고침</button></div>
+    <div id="igQueue" style="display:flex;flex-direction:column;gap:8px"><p class="muted">-</p></div>
+  </div>
+  <details class="panel fold" id="igConnBox" data-step="5">
+    <summary><h2>연결 설정</h2><span id="igConnPill" class="pill">확인 중</span><span class="fold-hint">펼치기</span></summary>
+    <div class="conn" id="igConn"></div>
+    <div id="igDriveHelp" class="status warn" hidden style="margin-top:10px">구글 드라이브 폴더를 찾지 못했어요. 예약한 사진이 인스타로 가려면 구글 드라이브가 필요해요 (처음 한 번만):
+1) google.com/drive/download 에서 'Windows용 Drive' 설치
+2) gimchaehyeon9 구글 계정으로 로그인 (설정에서 '스트리밍' 그대로 두기)
+3) 탐색기에 생긴 G: 드라이브 → 내 드라이브 → "키친앤코 인스타 업로드" 폴더가 보이면 아래 [다시 찾기]</div>
+    <div class="tokbox" id="igTokBox" style="margin-top:12px;padding:12px;border:1px solid var(--line,#ddd);border-radius:10px">
+      <b>인스타 게시 토큰</b> <small>이 PC에만 저장돼요 (예약 게시가 이 토큰을 써요)</small>
+      <div class="hint" id="igTokState">확인 중…</div>
+      <label class="field">새 토큰 붙여 넣기 <small>Meta 앱 → Instagram API 설정 → 토큰 생성</small><input id="igTokInput" type="password" class="path-in" placeholder="토큰을 붙여 넣고 [토큰 저장]" autocomplete="off"></label>
+      <div class="btns"><button type="button" id="igTokSave" class="btn ghost">토큰 저장</button><button type="button" id="igTokRefresh" class="btn ghost">토큰 연장 (60일)</button><button type="button" id="igTokTest" class="btn ghost">연결 시험</button></div>
+    </div>
+    <label class="field" style="margin-top:12px">개인 시트 위치<input id="setSheet" class="path-in" autocomplete="off"></label>
+    <label class="field">시공사례 사진 폴더<input id="setPhoto" class="path-in" autocomplete="off"></label>
+    <label class="field">구글 드라이브 "키친앤코 인스타 업로드" 폴더<input id="setQueue" class="path-in" placeholder="비우면 자동으로 찾아요" autocomplete="off"></label>
+    <label class="field">바로 발행 즉시 실행 — 루틴 ID (trig_로 시작, 주소를 붙여 넣어도 돼요)<input id="setFireId" class="path-in" placeholder="비워 두면 매시 5분에 확인해서 올려요" autocomplete="off"></label>
+    <label class="field">바로 발행 즉시 실행 — 토큰 (sk-ant-oat01-… 한 번만 보여요)<input id="setFireToken" type="password" class="path-in" placeholder="토큰을 붙여 넣고 [저장]" autocomplete="off"></label>
+    <div class="hint" id="setFireState"></div>
+    <div class="btns"><button type="button" id="setSave" class="btn ghost">저장</button><button type="button" id="setFind" class="btn ghost">다시 찾기</button><button type="button" id="setFireTest" class="btn ghost">즉시 실행 연결 시험</button></div>
+  </details>
+</aside>
+<div class="wz-nav" id="igNav"></div>
+</div>
+</main>
+<div id="settings" class="drawer" hidden>
+  <div class="drawer-box" role="dialog" aria-label="설정">
+    <div class="drawer-head"><h2>설정 · 도움말</h2><button type="button" id="closeSettings" class="tiny">닫기 ✕</button></div>
+    <div class="drawer-body">
+      <details class="set-acc" name="settingsAcc" id="setAccSa">
+        <summary><h3>네이버 검색광고 <small>키워드 검색량</small></h3><span id="saState" class="pill">확인 중…</span></summary>
+    <div class="sa">
+      <ol class="howto">
+        <li>searchad.naver.com 로그인 → 오른쪽 위 <b>도구 › API 사용 관리</b></li>
+        <li><b>네이버 검색광고 API 서비스 신청</b> → 발급된 <b>CUSTOMER_ID · 액세스라이선스 · 비밀키</b>를 아래에 붙여넣기</li>
+      </ol>
+      <div class="grid3">
+        <label class="field">CUSTOMER_ID<input id="saCustomer" inputmode="numeric" autocomplete="off"></label>
+        <label class="field">액세스라이선스<input id="saKey" autocomplete="off"></label>
+        <label class="field">비밀키<input id="saSecret" type="password" autocomplete="off"></label>
+      </div>
+      <button type="button" id="saSave" class="btn ghost">저장</button>
+      <p class="help">키는 이 PC 사용자 폴더(.kitchenko-studio)에만 저장돼 새 버전으로 바꿔도 다시 입력할 필요 없고, 네이버 검색광고 서버에만 사용됩니다.</p>
+    </div>
+      </details>
+      <details class="set-acc" name="settingsAcc" id="setAccAi">
+        <summary><h3>Claude Code <small>사진 보고 글쓰기</small></h3><span id="setClaudePill" class="pill">확인 중…</span></summary>
+    <div class="howto-box"><b>처음 한 번만</b> — Claude Code 설치·로그인
+      <ol class="howto">
+        <li>Node.js가 있는 PC에서 <b>명령 프롬프트(cmd)</b>를 열고 <code>npm install -g @anthropic-ai/claude-code</code> 입력</li>
+        <li><code>claude auth login</code> 입력 → 브라우저에서 <b>Claude 구독 계정</b>으로 로그인 (Console/API가 아니라 claude.ai 쪽)</li>
+        <li>여기서 <button type="button" id="aiRecheck" class="tiny">다시 확인</button> 을 누르고 위에 ✓가 뜨면 끝</li>
+      </ol>
+      <p class="help">사진은 이 PC 안에서만 임시 폴더로 옮겨 Claude에게 보여 주고, 끝나면 지워요. API 키 환경변수가 있어도 무시하고 구독 로그인만 써요.</p>
+    </div>
+      </details>
+      <details class="set-acc" name="settingsAcc" id="setAccTpl">
+        <summary><h3>기존 글 서식 <small>키친앤코 · 처음 한 번만</small></h3></summary>
+    <div class="tpl-box">
+      <b>기존 글 서식 가져오기 (처음 한 번만)</b>
+      <p class="help">크롬에서 기존 글(예: 다대롯데캐슬블루)을 열고 <b>[수정]</b>을 눌러 편집 화면을 띄운 뒤 아래 버튼을 누르세요. <b>키친앤코_블로그서식.json</b> 파일이 저장되면 채팅에 첨부해 주세요. (읽기만 해요 · 수정 화면은 저장하지 말고 닫기)</p>
+      <button type="button" id="captureTpl" class="btn wide-ghost">기존 글 서식 가져오기</button>
+    </div>
+      </details>
+      <details class="set-acc" name="settingsAcc" id="setAccFix">
+        <summary><h3>문제가 생겼을 때</h3></summary>
+        <div class="btns">
+          <button type="button" id="diagCopy" class="btn ghost">진단 정보 복사</button>
+          <button type="button" id="videoProbe" class="btn ghost">동영상 창 구조 보기</button>
+          <button type="button" id="publishProbe" class="btn ghost">발행 창 구조 보기 (예약 발행 만들 때)</button>
+        </div>
+        <p class="help">임시저장이 실패하거나 동영상이 안 올라갈 때 눌러서, 복사된 내용을 채팅에 붙여 주세요. 글은 바뀌지 않아요.</p>
+      </details>
+    </div>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script src="js/util.js"></script>
+<script src="js/level.js"></script>
+<script src="js/tone.js"></script>
+<script src="js/geo.js"></script>
+<script src="js/levelhelp.js"></script>
+<script src="js/phrases.js"></script>
+<script src="js/blog-template.js"></script>
+<script src="js/bank.js"></script>
+<script src="js/writer.js"></script>
+<script src="js/logo.js"></script>
+<script src="js/logo-lemon.js"></script>
+<script src="js/photos.js"></script>
+<script src="js/export.js"></script>
+<script src="js/autofix.js"></script>
+<script src="js/slideshow.js"></script>
+<script src="js/places.js"></script>
+<script src="js/landparse.js"></script>
+<script src="js/site.js"></script>
+<script src="js/lines.js"></script>
+<script src="js/check.js"></script>
+<script src="js/stepper.js"></script>
+<script src="js/keywords.js"></script>
+<script src="js/naver.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/app.js"></script>
+<script src="js/hub.js"></script>
+<script src="js/cafehub.js"></script>
+<script src="js/lemon.js"></script>
+<script src="js/sheetrec.js"></script>
+<script src="js/lemon-profile.js"></script>
+</body>
+</html>

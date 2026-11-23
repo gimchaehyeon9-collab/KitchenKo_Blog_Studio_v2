@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "키친앤코 블로그 스튜디오 연결",
+  "version": "2.10.38",
+  "description": "키친앤코 블로그 스튜디오(내 PC)에서 네이버 글쓰기 임시저장과 검색광고 검색량 조회, 카페 글 읽기, 네이버 부동산 단지 조회(읽기만), 현장 일정→아인 촬영 사진 가져오기(읽기만)를 돕습니다. 발행은 하지 않습니다.",
+  "permissions": ["tabs", "scripting", "storage", "debugger"],
+  "host_permissions": [
+    "https://blog.naver.com/*",
+    "https://*.naver.com/*",
+    "https://manage.searchad.naver.com/*",
+    "https://site-schedule.pages.dev/*",
+    "https://total.lemon-house.kr/*",
+    "http://127.0.0.1/*"
+  ],
+  "background": { "service_worker": "worker.js" },
+  "action": { "default_title": "키친앤코 블로그 스튜디오", "default_popup": "popup.html" },
+  "content_scripts": [
+    { "matches": ["http://127.0.0.1/*"], "js": ["local-bridge.js"], "run_at": "document_start", "all_frames": true }
+  ]
+}

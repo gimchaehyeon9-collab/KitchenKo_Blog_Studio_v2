@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>키친앤코 인스타 러너</title>
+<style>
+  body{font:16px/1.7 system-ui,-apple-system,"Malgun Gothic",sans-serif;max-width:640px;margin:40px auto;padding:0 16px;color:#222;background:#fff}
+  h1{font-size:20px;margin:0 0 12px}
+  .st{font-size:18px;font-weight:700;padding:12px 14px;border-radius:10px;background:#f3f3f3}
+  .st.ok{background:#e8f5e9;color:#1b5e20}.st.no{background:#fdecea;color:#b71c1c}
+  small{color:#666}
+</style>
+</head>
+<body>
+<h1>키친앤코 인스타 러너</h1>
+<div class="st" id="state">확인 중…</div>
+<p><small>이 페이지는 예약 게시 작업이 인스타 API 를 부르는 통로예요. 토큰 값은 이 PC 의 스튜디오 안에만 있고, 이 페이지에도 나오지 않아요.<br>
+사람이 열 필요는 없어요. 토큰은 스튜디오 [인스타] 탭 → 연결 설정에서 저장해요.</small></p>
+<script>
+(() => {
+  'use strict';
+  const H = { 'Content-Type': 'application/json', 'X-KK-Insta': '1', 'X-KK-Who': 'runner' };
+  const read = async r => { try { return await r.json(); } catch (_) { return { ok: false, error: '스튜디오 응답을 읽지 못했어요.' }; } };
+  const post = async (u, b) => { try { return await read(await fetch(u, { method: 'POST', headers: H, body: JSON.stringify(b || {}) })); } catch (e) { return { ok: false, error: '스튜디오에 연결하지 못했어요: ' + e.message }; } };
+
+  const kkIg = {
+    version: '2.10.39',
+    port: location.port,
+    /** 토큰이 저장돼 있는지 (값은 안 줘요): { ok, has, username, expiresAt, ... } */
+    async status() { try { return await read(await fetch('/api/ig/token', { headers: H })); } catch (e) { return { ok: false, error: '스튜디오에 연결하지 못했어요: ' + e.message }; } },
+    /** 인스타 API 호출. path 예: '/17841432256361321/media', params: { image_url, caption, ... }, method: 'POST'(기본) | 'GET'
+     *  돌려주는 값: { ok, status, data } — ok 는 data.error 가 없을 때 true. 토큰은 스튜디오가 알아서 붙여요. */
+    async call(path, params, method) {
+      const j = await post('/api/ig/graph', { path, params: params || {}, method: method || 'POST' });
+      if (!j.ok) return { ok: false, status: 0, noToken: !!j.noToken, data: { error: { message: j.error || '요청 실패' } } };
+      return { ok: !(j.data && j.data.error), status: j.status, data: j.data };
+    },
+    /** 인스타 사진 주소의 SHA-256 (같은 사진이 두 번 들어갔는지 확인용). 스튜디오가 대신 받아서 계산해요. */
+    async hash(url) { const j = await post('/api/ig/hash', { url }); return j.ok ? { ok: true, sha256: j.sha256, bytes: j.bytes } : { ok: false, error: j.error || '확인 실패' }; }
+  };
+  window.kkIg = kkIg;
+
+  const el = document.getElementById('state');
+  kkIg.status().then(s => {
+    if (s && s.ok && s.has) { el.className = 'st ok'; el.textContent = 'KK-RUNNER 준비됨 · 토큰 저장됨 (' + (s.username || '계정 확인 전') + ') · 포트 ' + location.port; }
+    else if (s && s.ok) { el.className = 'st no'; el.textContent = 'KK-RUNNER 토큰 없음 · 스튜디오 [인스타] 탭 → 연결 설정에서 토큰을 저장해 주세요 · 포트 ' + location.port; }
+    else { el.className = 'st no'; el.textContent = 'KK-RUNNER 오류 · ' + ((s && s.error) || '스튜디오에 연결하지 못했어요'); }
+  });
+})();
+</script>
+</body>
+</html>

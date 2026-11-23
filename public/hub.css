@@ -1,0 +1,243 @@
+/* 현장 · 인스타 탭 (블로그 화면 스타일은 그대로 두고 추가만 합니다) */
+.hub-tabs{display:flex;gap:4px;background:#2c241d;border-radius:10px;padding:3px}
+.hub-tabs button{border:0;background:none;color:#cbbfb2;padding:6px 16px;border-radius:8px;font-weight:600;font-size:13.5px;cursor:pointer}
+.hub-tabs button.on{background:#f4efe8;color:#1e1813}
+.hub-tabs button .cnt{font-size:11px;opacity:.75;margin-left:4px}
+body:not(.hub-blog) #newPost,body:not(.hub-blog) #extState{display:none}
+.hub{max-width:1500px;margin:0 auto;padding:20px 24px 60px}
+.hub-grid{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:20px}
+.hub-main{display:flex;flex-direction:column;gap:16px;min-width:0}
+.hub-side{display:flex;flex-direction:column;gap:16px;position:sticky;top:64px;align-self:start;max-height:calc(100vh - 80px);overflow:auto;padding-right:2px}
+@media (max-width:1100px){.hub-grid{grid-template-columns:1fr}.hub-side{position:static;max-height:none}}
+@media (max-width:760px){.top{flex-wrap:wrap;gap:8px}.hub{padding:16px}}
+
+/* 현장 표 */
+.st-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.st-tools input{max-width:260px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--sub);font-weight:600}
+.seg button.on{background:var(--wood);color:#fff}
+.st-table{width:100%;border-collapse:collapse;font-size:13px}
+.st-table th{text-align:left;font-weight:500;color:var(--sub);border-bottom:1px solid var(--line);padding:7px 6px;white-space:nowrap}
+.st-table td{border-bottom:1px solid #f1ece5;padding:8px 6px;vertical-align:middle}
+.st-table tr:hover td{background:#fbf8f4}
+.st-name{max-width:420px}
+.st-name b{font-weight:600}
+.st-name small{display:block;color:var(--sub);font-size:11.5px}
+.ic{display:inline-block;font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid var(--line);background:#fff;margin:1px 2px 1px 0;white-space:nowrap}
+.ic.done{background:#e6eeff;border-color:#c5d5fb;color:#2f56b0}
+.ic.left{background:#fff6ea;border-color:#efd9b5;color:#8a5a12}
+.ic.seoul{background:#ffe6d5;border-color:#f4c4a2;color:#a3511a}
+.ic.hold{background:#eee;color:#777}
+.ok-mark{color:#2f56b0;font-weight:700}
+.st-acts{white-space:nowrap;text-align:right}
+.st-acts .btn{padding:4px 9px;font-size:12px}
+.st-empty{padding:30px;text-align:center;color:var(--sub)}
+.table-wrap{overflow:auto}
+
+/* 인스타 — 추천 현장 */
+.recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.rec{text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:5px;font:inherit}
+.rec:hover{border-color:var(--wood-2)}
+.rec.on{border-color:var(--wood);box-shadow:0 0 0 2px #e6d6c4}
+.rec .t{font-weight:600;font-size:13px;line-height:1.4}
+.rec .d{font-size:11.5px;color:var(--sub)}
+
+/* 사진 고르기 */
+.pk-group{margin:10px 0 4px;font-size:12.5px;font-weight:700;color:var(--wood);display:flex;gap:8px;align-items:center}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.pk{position:relative;border:2px solid transparent;border-radius:8px;padding:0;background:#f1ece5;cursor:pointer;aspect-ratio:4/3;overflow:hidden}
+.pk img{width:100%;height:100%;object-fit:cover;display:block}
+.pk.on{border-color:var(--wood)}
+.pk .o{position:absolute;top:5px;left:5px;min-width:22px;height:22px;border-radius:11px;background:var(--wood);color:#fff;font-size:12px;font-weight:700;display:none;place-items:center;padding:0 6px}
+.pk.on .o{display:grid}
+.pk .star{position:absolute;top:4px;right:6px;color:#ffcc33;font-size:16px;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.pk .it{position:absolute;bottom:4px;left:5px;font-size:10.5px;background:rgba(30,24,19,.7);color:#fff;border-radius:4px;padding:0 5px}
+
+/* 4:5 자르기 */
+.crops{display:flex;flex-wrap:wrap;gap:12px}
+.crop{width:176px;display:flex;flex-direction:column;gap:5px}
+.crop canvas{width:176px;height:auto;aspect-ratio:var(--pr,.8);border-radius:6px;border:1px solid var(--line);cursor:grab;touch-action:none;background:#f1ece5}
+.crop.cur canvas{outline:2px solid var(--wood);outline-offset:1px}
+.crop canvas:active{cursor:grabbing}
+.crop .row{display:flex;gap:4px;align-items:center;font-size:12px}
+.crop .row .n{font-weight:700;margin-right:auto}
+.crop input[type=range]{width:100%}
+
+/* 캡션 */
+.opts{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.opt{text-align:left;border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 11px;cursor:pointer;font:inherit;font-size:13px;line-height:1.6}
+.opt.on{border-color:var(--wood);background:#faf5ef}
+.opt .k{display:block;font-size:11px;color:var(--sub);font-weight:700}
+.ig-preview{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.ig-stage{position:relative;width:min(100%,calc(46vh * var(--pr,.8)));margin:0 auto;outline:none}
+.ig-stage canvas{width:100%;height:auto;display:block;aspect-ratio:var(--pr,.8);background:#f1ece5;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.ig-grab{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);background:rgba(0,0,0,.55);color:#fff;font-size:11.5px;font-weight:600;border-radius:999px;padding:3px 11px;pointer-events:none;white-space:nowrap;transition:opacity .25s}
+.ig-stage.drag .ig-grab{opacity:0}
+.ig-grab:empty{display:none}
+.ig-stage canvas:active{cursor:grabbing}
+.ig-stage:focus-visible{box-shadow:0 0 0 2px var(--wood-2)}
+.ig-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.9);color:#222;font-size:26px;line-height:1;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.4);display:grid;place-items:center;padding:0 0 4px}
+.ig-nav:hover{background:#fff}
+.ig-nav.prev{left:8px}.ig-nav.next{right:8px}
+.ig-nav:disabled{opacity:0;pointer-events:none}
+.ig-badge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.62);color:#fff;font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px;pointer-events:none}
+.ig-badge:empty{display:none}
+.ig-thumbs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;padding:2px 10px 8px}
+.ig-thumbs:empty{display:none}
+.ig-thumbs .th{position:relative;width:46px;height:46px;border:2px solid transparent;border-radius:7px;background:#f1ece5;padding:0;display:grid;place-items:center;cursor:pointer;overflow:hidden}
+.ig-thumbs .th canvas{max-width:100%;max-height:100%;display:block}
+.ig-thumbs .th.on{border-color:var(--wood)}
+.ig-thumbs .th .no{position:absolute;left:2px;top:2px;min-width:15px;height:15px;border-radius:8px;background:rgba(30,24,19,.78);color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 3px;line-height:1}
+.ig-tools{border-top:1px solid var(--line);padding:8px 10px 7px;display:flex;flex-direction:column;gap:6px;background:#fbf8f4}
+.ig-tools[hidden]{display:none}
+.ig-tools .tl{display:flex;align-items:center;gap:5px}
+.ig-tools .lb{width:56px;font-size:12px;color:var(--sub);font-weight:600;flex:none}
+.ig-tools .tb{min-width:38px;height:32px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;font-size:13px;padding:0 8px;color:var(--wood);font-weight:700;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.ig-tools .tb:hover:not(:disabled){border-color:var(--wood-2);background:#faf5ef}
+.ig-tools .tb:active:not(:disabled){background:#efe6db}
+.ig-tools .tb:disabled{opacity:.35;cursor:default}
+.ig-tools .tb.txt{font-size:12px;font-weight:600;white-space:nowrap}
+.ig-tools .tb.danger{margin-left:auto;color:var(--bad)}
+.ig-tools .zv{min-width:50px;text-align:center;font-size:13px;font-weight:700}
+.ig-tools .adj .zv{min-width:34px;font-size:12px}
+.ig-tools input[type=range]{flex:1;min-width:0;height:22px;accent-color:var(--wood)}
+.ig-tools .hint{margin:0;font-size:11.5px;color:var(--sub)}
+.ig-cap{border-top:1px solid var(--line)}
+.ratio-row{display:flex;align-items:center;gap:8px;margin:-4px 0 10px}
+.ratio-seg button{padding:5px 9px;font-size:12px}
+.ph .ratio-seg{flex:none}
+.st-toggle{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--sub);cursor:pointer;border:1px solid var(--line);border-radius:8px;padding:6px 11px;background:#fff;user-select:none;-webkit-user-select:none}
+.st-toggle input{margin:0}
+.st-toggle.on{background:var(--wood);color:#fff;border-color:var(--wood)}
+.st-toggle.dis{opacity:.45;pointer-events:none}
+.ig-cap{white-space:pre-wrap;font-size:13px;line-height:1.65;padding:12px 14px}
+.ig-cap .tag{color:#2a5db0}
+.ig-cap .foot{color:#555}
+.ig-cap .note{color:var(--sub);font-size:12px}
+.ig-dots{display:flex;justify-content:center;gap:4px;padding:6px}
+.ig-dots i{width:7px;height:7px;border-radius:50%;background:#ddd;cursor:pointer}
+.ig-dots i.on{background:#3897f0}
+.ig-dots:empty{display:none}
+
+/* 예약 목록 */
+.qitem{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.qitem .h{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.qitem .h b{flex:1;min-width:0}
+.qitem p{margin:0;font-size:12.5px;color:#444;white-space:pre-wrap}
+.qthumbs{display:flex;gap:4px;flex-wrap:wrap}
+.qthumbs img{width:44px;height:55px;object-fit:cover;border-radius:4px;border:1px solid var(--line)}
+.qitem .acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.qitem .acts input[type=date]{width:auto;padding:4px 8px}
+.pill.wait{background:#fff4dc;color:var(--warn);border-color:#ecd9ae}
+.pill.done{background:#e6eeff;color:#2f56b0;border-color:#c5d5fb}
+.conn{display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.conn div{display:flex;gap:8px;align-items:flex-start}
+.conn .y{color:var(--ok);font-weight:700}
+.conn .n{color:var(--bad);font-weight:700}
+.path-in{font-size:12px !important;padding:6px 8px !important}
+
+/* 품목 칩 → 사진 보기 */
+button.ic.pick{font:inherit;font-size:11px;cursor:pointer}
+button.ic.pick:hover{border-color:var(--wood);box-shadow:0 0 0 2px #e6d6c4}
+.item-modal{position:fixed;inset:0;background:rgba(30,24,19,.55);z-index:60;display:flex;align-items:center;justify-content:center;padding:24px}
+.item-modal[hidden]{display:none}
+.im-box{background:#fff;border-radius:14px;padding:18px 20px;max-width:980px;width:100%;max-height:88vh;overflow:auto}
+.im-h{display:flex;gap:10px;align-items:center;margin-bottom:10px;position:sticky;top:-18px;background:#fff;z-index:3;padding:8px 0 6px}.im-h b{flex:1;font-size:15px}
+.im-flt{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.im-flt .chip{cursor:pointer}.im-flt .chip small{font-size:11px;color:var(--sub);margin-left:4px}
+.im-flt .chip.on{background:var(--wood);border-color:var(--wood);color:#fff}.im-flt .chip.on small{color:#fff}
+.im-box .pgrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.im-bar{position:sticky;bottom:-18px;background:#fff;z-index:3;margin-top:12px;padding:10px 0 4px;border-top:1px solid var(--line)}
+.im-bar .btn:disabled{opacity:.45;cursor:not-allowed}
+#pkView{flex:none}
+button.ic.pick.all{font-weight:600}
+.st-table td:nth-child(5){white-space:nowrap}
+button.ic.pick{padding:1px 7px;line-height:inherit;color:inherit;margin:1px 2px 1px 0}
+button.ic.pick.left{color:#8a5a12}
+
+/* ───── 레몬하우스 모드 ───── */
+.lemon-only{display:none}
+body.brand-lemon .lemon-only{display:revert}
+body.brand-lemon .kk-only{display:none !important}
+.brand-switch{display:inline-flex;gap:2px;margin-left:14px;background:#2c241d;border-radius:8px;padding:2px;letter-spacing:0;opacity:1 !important;vertical-align:middle}
+.brand-switch button{border:0;background:none;color:#cbbfb2;padding:3px 10px;border-radius:6px;font-weight:600;font-size:12px;cursor:pointer;letter-spacing:0}
+.brand-switch button.on{background:#f4efe8;color:#1e1813}
+body.brand-lock .brand-switch{display:none}
+.lm-chips .chip{min-width:44px;text-align:center}
+.lm-chips .chip.on{background:var(--wood);border-color:var(--wood);color:#fff}
+.lm-folder{padding:8px 0;font-size:13px;word-break:break-all}
+.lm-folder.ok{color:#2f56b0;font-weight:600}
+.lm-table td{word-break:keep-all}
+.lm-table .st-name{max-width:none}
+.lm-table .st-name b{font-weight:600;word-break:break-all;display:block;line-height:1.45}
+.lm-prog{font-size:13px;line-height:1.7}
+.lm-prog ol{margin:0;padding-left:0;list-style:none}
+.lm-prog li{padding:2px 0}
+.lm-prog li .m{display:inline-block;width:20px;text-align:center}
+.lm-prog li.run{color:var(--wood);font-weight:600}
+.lm-prog li.ok{color:#2f56b0}
+.lm-prog li.err{color:#b3261e;font-weight:600}
+.lm-prog .bar{height:5px;border-radius:3px;background:#efe9e1;margin:6px 0 2px;overflow:hidden}
+.lm-prog .bar i{display:block;height:100%;background:var(--wood);width:0;transition:width .2s}
+
+/* ───── 레몬하우스: 내 블로그 문체·서식 ───── */
+.lp summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none}
+.lp summary::-webkit-details-marker{display:none}
+.lp summary h2{margin:0;font-size:15px}
+.lp[open] summary{margin-bottom:10px}
+.lp .lp-step{border-top:1px solid var(--line);padding:10px 0 4px}
+.lp .lp-step:first-of-type{border-top:0}
+.lp .lp-step>b{display:block;margin-bottom:4px}
+.lp textarea{width:100%;font:inherit;font-size:12.5px;line-height:1.55}
+.lp .status{white-space:pre-wrap}
+.lp details.more summary{font-size:12.5px;color:var(--sub)}
+.pv-center{text-align:center}
+.pv-gray{color:#777}
+.pv-todo{color:#b3261e;font-size:12px}
+.pv-head{margin:22px auto 10px;padding:6px 16px;width:max-content;max-width:90%;text-align:center;font-weight:600;border:1px solid #cfcfcf;border-width:2px 0 2px 0;letter-spacing:.02em}
+.card-text .lp-space{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.card-text .lp-space input{flex:1;min-width:0}
+.lp textarea,.lp input,.lp select{font-weight:400}
+/* 추천글 아파트에 맞는 인텍 찾기 */
+#lmMatch textarea{width:100%;font:inherit;font-size:12.5px;line-height:1.5;font-weight:400}
+#lmMatch input{font-weight:400}
+.lm-chips .chip small{font-size:11px;color:var(--sub);margin-left:4px}
+.lm-chips .chip.on small{color:#fff}
+.lm-tag{display:inline-block;font-size:11px;line-height:1;padding:3px 7px;border-radius:999px;background:#f1ece5;color:#6f665c;margin:3px 4px 0 0}
+.lm-tag.good{background:#e7f3eb;color:#2f7a4b}
+.lm-tag.warn{background:#fff4dc;color:#9a6a00}
+.lm-tag.src{background:#e9eefb;color:#2f56b0}
+.lm-prev>td{padding:6px 8px 12px;background:#faf7f2}
+.lm-prev img{height:96px;width:auto;border-radius:6px;margin:0 6px 6px 0;vertical-align:top}
+.lm-near{margin:8px 0 2px;font-size:12.5px;color:#9a6a00;font-weight:600}
+
+
+/* 이미 직접 올렸어요 → 시트에 기록 */
+.mk-list{display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:12.5px}
+.mk-list:empty{display:none}
+.mk-list .r{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:6px}
+.mk-list .r b{flex:1;min-width:0}
+.rec .d.pend{color:var(--warn)}
+#igMarkBox>.status{margin:10px 20px 0;padding:9px 12px;border-radius:8px}
+/* v2.10.11: 스튜디오만 알고 있는(시트 반영 전) 표시 · 예약중 */
+.ic.pend{border-style:dashed}
+.ic.queued{background:#eaf6ea;border-color:#bcdcbc;color:#2d6b2d}
+button.ic.pick.queued{color:#2d6b2d}
+
+/* v2.10.30: 레몬하우스 [카페 공사전·중] 탭 */
+.cafe-hub{padding:14px 18px}
+.cafe-hub .cafe-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.cafe-hub .cafe-bar .more{flex:1 1 320px;margin:0}
+.cafe-hub .status{margin:8px 0;white-space:pre-wrap}
+#cafeFrame{display:block;width:100%;height:calc(100vh - 128px);min-height:620px;border:1px solid #d9d2c8;border-radius:12px;background:#fff}
+
+/* 현장 고르기 — 쓸 아파트(부동산 찾기 B) 요약 · 평수 허용 범위 · 직접 입력 (2.10.37) */
+.lm-target{border:1px solid var(--line);border-radius:8px;background:#fbf8f4;padding:9px 12px;margin:0 0 10px;font-size:13px;line-height:1.6}
+.lm-target.ok{background:#f1f8f3;border-color:#cbe5d3}
+.lm-target.warn{background:#fff7e6;border-color:#f0d9a8;color:#7a5a00}
+.lm-match-ctl{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lm-match-ctl .field{margin-bottom:6px}
+.lm-py{display:flex;gap:6px}.lm-py input{flex:1;min-width:0}
+.lm-sub{margin:14px 0 4px;font-size:13px;color:var(--sub);font-weight:600}
+@media (max-width:640px){.lm-match-ctl{grid-template-columns:1fr}}

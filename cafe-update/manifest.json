@@ -1,0 +1,19 @@
+{
+ "version": "2.10.40-cafe1",
+ "files": [
+  "cafe/chrome.js",
+  "cafe/editor.js",
+  "cafe/fix.js",
+  "cafe/jobs.js",
+  "cafe/routes.js",
+  "cafe/settings.js",
+  "cafe/tags.js",
+  "lib/enhance.js",
+  "lib/lemon-stamp.png",
+  "lib/slideshow.js",
+  "lib/stamp.js",
+  "public/cafe.html",
+  "public/photoedit.js",
+  "public/straighten.js"
+ ]
+}
